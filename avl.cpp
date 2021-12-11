@@ -1,18 +1,29 @@
 #include <iostream> 
 using namespace std;
 
-/*
+/*  bf = height of left subtree - height of right subtree
 
-                       
+
+                       (this is a right left rotation case)
                        4
-                     /    \
-                   2      8
-                  / \     /                
-                 1   3  10
-                       /  \               
-                      9    15
+                     /    \                                         
+                   2        8  (bf = -2 at 8) (second rotate 8 towards left)
+                  / \        \                
+                 1   3        10 (first rotate 10 towards right)
+                             /                
+                            9    
 
-Above is the bst we are working with
+Above is the bst we are working with and is unbalanced
+
+
+                       4
+                     /    \                                         
+                   2        9    
+                  / \       / \               
+                 1   3     8   10 (after right left rotation this is a balanced tree)
+                                           
+                               
+                             thus with left rotation at 8 we get a balanced tree  
                   
 
 
@@ -24,7 +35,7 @@ struct node
     node *right, *left;
 };
 
-class BST 
+class BST  // avl
 {
     node  *temp, *temp1 , *temp2;
 
@@ -330,18 +341,18 @@ int main()
 {
     BST obj;
 
-    obj.insert(obj.root, 4);
-    obj.insert(obj.root, 2);
-    obj.insert(obj.root, 8);
-    obj.insert(obj.root, 1);
-    obj.insert(obj.root, 3);
-    obj.insert(obj.root, 10);
-    obj.insert(obj.root, 9);
-    obj.insert(obj.root, 15);
+    // obj.insert(obj.root, 4);
+    // obj.insert(obj.root, 2);
+    // obj.insert(obj.root, 8);
+    // obj.insert(obj.root, 1);
+    // obj.insert(obj.root, 3);
+    // obj.insert(obj.root, 10);
+    // obj.insert(obj.root, 9);
+    
     
     
 
-    obj.inorder(obj.root); 
+    // obj.inorder(obj.root); 
 
     //checks for first case
 
