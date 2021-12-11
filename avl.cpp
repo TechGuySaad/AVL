@@ -56,7 +56,7 @@ class BST  // avl
     }
 
     void insert(node * , int);
-    void search(node *, int);
+    bool search(node *, int);
     void del(node * , int);
     void inorder(node *);
     void in_successor(node *);
@@ -64,9 +64,45 @@ class BST  // avl
 
     int height(node *);
     int bfac(node *);
+    void rr(node *);
+    void rl(node *);
 
 
 };
+
+bool BST::search(node *temp, int key)
+{
+    if(key < temp -> info)
+    {
+        if(temp -> left != NULL)
+        {
+            return search(temp-> left, key);
+        }
+
+    }
+
+    if(key > temp -> info)
+    {
+        if(temp -> right != NULL)
+        {
+            return search(temp -> right,key);
+        }
+    }
+
+    if(temp -> info == key)
+    {
+        cout<< "found the key : "<<temp -> info<<endl;
+        return 1;
+    }
+
+    
+        return 0;
+    
+
+    
+}
+
+
 
 int BST::height(node *temp)
 {
@@ -150,6 +186,54 @@ int BST::bfac(node *temp)
 
 }
 
+void BST::rr(node *temp)
+{
+    int bf = 0;
+
+    
+        if(temp -> left -> right == NULL)
+        {
+            temp1 = temp -> left;
+            temp -> left = NULL;
+            temp1 -> right = temp;
+            return;
+        }
+
+        if(temp -> left -> right != NULL)
+        {
+            temp1 = temp -> left;
+            temp -> left = NULL;
+            temp2 = temp1 -> right;
+            temp1 -> right = temp;
+            insert(root,temp2->info);
+            delete temp2;
+            return;
+
+            
+
+        }
+
+    
+
+    
+       
+
+
+    
+
+
+
+}
+
+void BST::rl(node *temp)
+{
+
+}
+
+
+
+
+
 void BST::inorder( node *r)
 {
     if(r != NULL)
@@ -166,52 +250,119 @@ void BST::inorder( node *r)
 
 void BST::insert(node *r , int key)
 {
+    int bf;
     
 
-  if(root == NULL)
-  {
-      root = new node;
+    if(root == NULL)
+    {
+        root = new node;
 
-      root -> info = key;
-      root -> left = NULL;
-      root -> right = NULL;
+        root -> info = key;
+        root -> left = NULL;
+        root -> right = NULL;
 
-      return;
+        return;
 
-  }
+    }
 
- if(key < r -> info && r-> left == NULL)
- {
-    r -> left = new node;
-    r -> left -> info = key;
-    r-> left -> right = NULL;
-    r -> left -> left = NULL;
-    return;
+    if(key < r -> info && r-> left == NULL)
+    {
+        r -> left = new node;
+        r -> left -> info = key;
+        r-> left -> right = NULL;
+        r -> left -> left = NULL;
+        
+        
+    
+        return;
 
- }
-
-
-
- if(key > r->info && r -> right == NULL)
- {
-    r -> right = new node;
-    r -> right -> info = key;
-    r ->right -> left = NULL;
-    r -> right -> right = NULL;
-    return;
+    }
 
 
- }
 
-  if(key < r -> info)
-  {
-      insert(r -> left , key);
-  }
+    if(key > r->info && r -> right == NULL)
+    {
+        r -> right = new node;
+        r -> right -> info = key;
+        r ->right -> left = NULL;
+        r -> right -> right = NULL;
+        return;
 
-  if(key > r -> info)
-  {
-      insert(r -> right ,key);
-  }
+
+    }
+
+    if(key < r -> info)
+    {
+        insert(r -> left , key);
+        bf = bfac(r);
+
+        if(bf > 1)
+        {
+            //check if ll case or lr case 
+            if(r -> left -> left != NULL)
+            {
+                if(search(r -> left ->left, key))
+                {
+                    rr(r);
+                    return;
+                }
+            }
+
+            if(r ->left -> right != NULL)
+            {
+                if(search(r -> left -> right,key))
+                {
+                    rl(r -> left);
+                    rr(r);
+                    return;
+                }
+            }
+        }
+
+        if(bf < -1)
+        {
+            //   check if rr case or rl case
+
+            if(temp -> right -> right != NULL)
+            {
+                if(search(temp -> right -> right, key))
+                {
+                    rl(temp);
+                    return;
+                }
+            }
+
+            if(temp -> right -> left != NULL)
+            {
+                if(search(temp -> right -> left,key))
+                {
+                    rr(temp -> right);
+                    rl(temp);
+                }
+            }
+            
+            
+        }
+
+
+
+
+    }
+
+    if(key > r -> info)
+    {
+        insert(r -> right ,key);
+        if(bf > 1)
+        {
+            //check if ll case or lr case 
+
+        }
+
+        if(bf < -1)
+        {
+            //   check if rr case or rl case
+        }
+    }
 
 
    
@@ -446,22 +597,24 @@ int main()
     obj.inorder(obj.root); 
     cout<<endl;
 
+    obj.search(obj.root, 20);
+
     //checking balance factor function
-    int bf;
-    bf = obj.bfac(obj.root);
-    cout<<"Balance factor of "<<obj.root ->info<<" is : "<<bf<<endl;
+    // int bf;
+    // bf = obj.bfac(obj.root);
+    // cout<<"Balance factor of "<<obj.root ->info<<" is : "<<bf<<endl;
 
-    bf = obj.bfac(obj.root -> left);
-    cout<<"Balance factor of "<<obj.root->left ->info<<" is : "<<bf<<endl;
+    // bf = obj.bfac(obj.root -> left);
+    // cout<<"Balance factor of "<<obj.root->left ->info<<" is : "<<bf<<endl;
 
-    bf = obj.bfac(obj.root->right);
-    cout<<"Balance factor of "<<obj.root->right ->info<<" is : "<<bf<<endl;
+    // bf = obj.bfac(obj.root->right);
+    // cout<<"Balance factor of "<<obj.root->right ->info<<" is : "<<bf<<endl;
 
-    bf = obj.bfac(obj.root -> left -> left);
-    cout<<"Balance factor of "<<obj.root->left ->left ->info<<" is : "<<bf<<endl;
+    // bf = obj.bfac(obj.root -> left -> left);
+    // cout<<"Balance factor of "<<obj.root->left ->left ->info<<" is : "<<bf<<endl;
 
-    bf = obj.bfac(obj.root-> right -> left);
-    cout<<"Balance factor of "<<obj.root-> right -> left ->info<<" is : "<<bf<<endl;
+    // bf = obj.bfac(obj.root-> right -> left);
+    // cout<<"Balance factor of "<<obj.root-> right -> left ->info<<" is : "<<bf<<endl;
 
 
 
