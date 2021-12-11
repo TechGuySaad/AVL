@@ -33,11 +33,14 @@ struct node
 {
     int info;
     node *right, *left;
+
 };
 
 class BST  // avl
 {
     node  *temp, *temp1 , *temp2;
+    int h;
+    
 
     public:
     node *root;
@@ -48,6 +51,7 @@ class BST  // avl
         temp = NULL;
         temp1 = NULL;
         temp2 = NULL;
+        
 
     }
 
@@ -58,8 +62,71 @@ class BST  // avl
     void in_successor(node *);
     void in_predecessor(node *, int);
 
+    int height(node *);
+
 
 };
+
+int BST::height(node *temp)
+{
+    int lh = 0;
+    int rh = 0;
+    
+   
+
+    if(temp -> left != NULL)
+    {
+        
+        lh++;
+        lh = height(temp -> left) +lh;
+    }
+
+    if(temp -> right != NULL)
+    {
+        
+        rh++;
+        rh = height(temp->right) + 1;
+    }
+
+    
+    
+    if(temp -> right == NULL && temp -> left == NULL)
+    {
+
+        return 0;
+    }
+
+   
+
+    if(lh> rh)
+    {
+        h = lh;
+        return h;
+
+    }
+    if(rh > lh)
+    {
+        h =rh;
+        return h;
+
+    }
+
+    if(lh == rh)
+    {
+        h = lh;
+        h = rh;
+        return h;
+    }
+
+    return h;
+
+    
+
+
+     
+    
+
+}
 
 void BST::inorder( node *r)
 {
@@ -326,7 +393,7 @@ void BST::del(node *r, int key)
 
 
 
-
+    
     
     
    
@@ -341,18 +408,31 @@ int main()
 {
     BST obj;
 
-    // obj.insert(obj.root, 4);
-    // obj.insert(obj.root, 2);
-    // obj.insert(obj.root, 8);
-    // obj.insert(obj.root, 1);
-    // obj.insert(obj.root, 3);
-    // obj.insert(obj.root, 10);
-    // obj.insert(obj.root, 9);
-    
+    obj.insert(obj.root, 4);
+    obj.insert(obj.root, 2);
+    obj.insert(obj.root, 9);
+    obj.insert(obj.root, 1);
+    obj.insert(obj.root, 3);
+    obj.insert(obj.root, 10);
+    obj.insert(obj.root, 8);
+    obj.insert(obj.root, 15);
     
     
 
-    // obj.inorder(obj.root); 
+    obj.inorder(obj.root); 
+    cout<<endl;
+
+    int t = obj.height(obj.root);
+    cout<<"height of tree with root " <<obj.root -> info<<" is "<<t<<endl;
+
+    t = obj.height(obj.root->right);
+    cout<<"height of tree with root " <<obj.root ->right-> info<<" is "<<t<<endl;
+
+    t = obj.height(obj.root->left);
+    cout<<"height of tree with root " <<obj.root ->left-> info<<" is "<<t<<endl;
+
+    t = obj.height(obj.root->left->left);
+    cout<<"height of tree with root " <<obj.root ->left-> left ->info<<" is "<<t<<endl;
 
     //checks for first case
 
