@@ -63,6 +63,7 @@ class BST  // avl
     void in_predecessor(node *, int);
 
     int height(node *);
+    int bfac(node *);
 
 
 };
@@ -125,6 +126,27 @@ int BST::height(node *temp)
 
      
     
+
+}
+
+int BST::bfac(node *temp)
+{
+    int lh = 0;
+    int rh = 0;
+
+    if(temp -> left != NULL)
+    {
+        lh = height(temp -> left);
+    }
+
+    if(temp -> right != NULL)
+    {
+        rh = height(temp->right);
+    }
+
+    int bf = lh - rh;
+    return bf;
+
 
 }
 
@@ -408,6 +430,8 @@ int main()
 {
     BST obj;
 
+    //checking insert function
+
     obj.insert(obj.root, 4);
     obj.insert(obj.root, 2);
     obj.insert(obj.root, 9);
@@ -422,17 +446,40 @@ int main()
     obj.inorder(obj.root); 
     cout<<endl;
 
-    int t = obj.height(obj.root);
-    cout<<"height of tree with root " <<obj.root -> info<<" is "<<t<<endl;
+    //checking balance factor function
+    int bf;
+    bf = obj.bfac(obj.root);
+    cout<<"Balance factor of "<<obj.root ->info<<" is : "<<bf<<endl;
 
-    t = obj.height(obj.root->right);
-    cout<<"height of tree with root " <<obj.root ->right-> info<<" is "<<t<<endl;
+    bf = obj.bfac(obj.root -> left);
+    cout<<"Balance factor of "<<obj.root->left ->info<<" is : "<<bf<<endl;
 
-    t = obj.height(obj.root->left);
-    cout<<"height of tree with root " <<obj.root ->left-> info<<" is "<<t<<endl;
+    bf = obj.bfac(obj.root->right);
+    cout<<"Balance factor of "<<obj.root->right ->info<<" is : "<<bf<<endl;
 
-    t = obj.height(obj.root->left->left);
-    cout<<"height of tree with root " <<obj.root ->left-> left ->info<<" is "<<t<<endl;
+    bf = obj.bfac(obj.root -> left -> left);
+    cout<<"Balance factor of "<<obj.root->left ->left ->info<<" is : "<<bf<<endl;
+
+    bf = obj.bfac(obj.root-> right -> left);
+    cout<<"Balance factor of "<<obj.root-> right -> left ->info<<" is : "<<bf<<endl;
+
+
+
+    //testing height funtion
+
+    // int t = obj.height(obj.root);
+    // cout<<"height of tree with root " <<obj.root -> info<<" is "<<t<<endl;
+
+    // t = obj.height(obj.root->right);
+    // cout<<"height of tree with root " <<obj.root ->right-> info<<" is "<<t<<endl;
+
+    // t = obj.height(obj.root->left);
+    // cout<<"height of tree with root " <<obj.root ->left-> info<<" is "<<t<<endl;
+
+    // t = obj.height(obj.root->left->left);
+    // cout<<"height of tree with root " <<obj.root ->left-> left ->info<<" is "<<t<<endl;
+
+    //testing delete function
 
     //checks for first case
 
