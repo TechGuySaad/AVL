@@ -325,8 +325,21 @@ void BST::insert(node *temp , int key)
             bf = bfac(root);
             if(bf > 1 && bfac(root -> left) <= 1)
             {
-                root = rr(root);
-                return;
+                if(search(root -> left -> left,key))
+                {
+                    root = rr(root);
+                    return;
+
+                }
+
+                if(search(root -> left -> right, key))
+                {
+                    root -> left = rl(root -> left);
+                    root = rr(root);
+                    return;
+                }
+
+                
                 
             }
             
@@ -337,7 +350,9 @@ void BST::insert(node *temp , int key)
 
         if(bf > 1) // the insertion was done in left child of current node
         {
-            //two cases for left child and left subtree case
+            //two cases for left child  case
+
+            //ll:
             if(search(temp -> left -> left ->left,key))
             {
                 temp -> left = rr(temp -> left);
@@ -345,12 +360,16 @@ void BST::insert(node *temp , int key)
 
                 return;
             }
-            if(search(temp -> left -> left ->right,key))
-            {
 
+            //lr:
+            if(search(temp -> left -> left -> right,key))
+            {
+                temp -> left -> left = rl(temp -> left -> left);
+                temp -> left = rr(temp -> left);
                 return;
             }
-            
+
+           
 
         }
 
@@ -376,6 +395,10 @@ void BST::insert(node *temp , int key)
                 root = rl(root);
                 return;
             }
+
+           
+
+
         }
 
         //non root case
@@ -383,10 +406,24 @@ void BST::insert(node *temp , int key)
         bf = bfac(temp -> right);
         if(bf < -1)
         {
-            temp -> right = rl(temp -> right);
-            return;
+            if(search(temp -> right -> right ->right, key))
+            {
+                temp -> right = rl(temp -> right);
+                return;
+
+            }
+
+            if(search(temp -> right -> right -> left,key))
+            {
+                temp -> right -> right = rr(temp -> right -> right);
+                temp -> right = rl(temp -> right);
+                return;
+            }
+            
 
         }
+
+       
 
     }
 
