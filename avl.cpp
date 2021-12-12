@@ -38,7 +38,7 @@ struct node
 
 class BST  // avl
 {
-    node  *temp, *temp1 , *temp2;
+    node  *temp, *temp1 , *temp2,*temp3;
     int h;
     
 
@@ -64,8 +64,8 @@ class BST  // avl
 
     int height(node *);
     int bfac(node *);
-    void rr(node *);
-    void rl(node *);
+    node* rr(node *);
+    node* rl(node *);
 
 
 };
@@ -91,7 +91,7 @@ bool BST::search(node *temp, int key)
 
     if(temp -> info == key)
     {
-        cout<< "found the key : "<<temp -> info<<endl;
+        
         return 1;
     }
 
@@ -172,12 +172,12 @@ int BST::bfac(node *temp)
 
     if(temp -> left != NULL)
     {
-        lh = height(temp -> left);
+        lh = height(temp -> left) +1;
     }
 
     if(temp -> right != NULL)
     {
-        rh = height(temp->right);
+        rh = height(temp->right) +1;
     }
 
     int bf = lh - rh;
@@ -186,9 +186,9 @@ int BST::bfac(node *temp)
 
 }
 
-void BST::rr(node *temp)
+node* BST::rr(node *temp)
 {
-    int bf = 0;
+    
 
     
         if(temp -> left -> right == NULL)
@@ -196,7 +196,7 @@ void BST::rr(node *temp)
             temp1 = temp -> left;
             temp -> left = NULL;
             temp1 -> right = temp;
-            return;
+            return temp1;
         }
 
         if(temp -> left -> right != NULL)
@@ -205,28 +205,42 @@ void BST::rr(node *temp)
             temp -> left = NULL;
             temp2 = temp1 -> right;
             temp1 -> right = temp;
-            insert(root,temp2->info);
-            delete temp2;
-            return;
-
+            temp -> left = temp2;
             
-
+            return temp1;
         }
 
-    
-
-    
-       
-
-
-    
+        return temp1;
 
 
 
 }
 
-void BST::rl(node *temp)
+node* BST::rl(node *temp)
 {
+    if(temp -> right -> left == NULL)
+    {
+        temp1 = temp -> right;
+        temp -> right = NULL;
+        temp1 -> left = temp;
+        return temp1;
+    }
+
+    if(temp -> right -> left != NULL)
+    {
+        temp1 = temp -> right;
+        temp2 = temp1 -> left;
+        temp -> right  = NULL;
+        temp1 -> left = temp;
+        temp -> right = temp2;
+        
+        return temp1;
+
+    }
+
+    return temp1;
+
+    
 
 }
 
@@ -248,7 +262,7 @@ void BST::inorder( node *r)
 
 
 
-void BST::insert(node *r , int key)
+void BST::insert(node *temp , int key)
 {
     int bf;
     
@@ -265,103 +279,77 @@ void BST::insert(node *r , int key)
 
     }
 
-    if(key < r -> info && r-> left == NULL)
+    if(key < temp -> info && temp-> left == NULL)
     {
-        r -> left = new node;
-        r -> left -> info = key;
-        r-> left -> right = NULL;
-        r -> left -> left = NULL;
+        temp -> left = new node;
+        temp -> left -> info = key;
+        temp-> left -> right = NULL;
+        temp -> left -> left = NULL;
         
-        
+
+    }
+
+   
+
+
+
+    if(key > temp->info && temp -> right == NULL)
+    {
+        temp -> right = new node;
+        temp -> right -> info = key;
+        temp ->right -> left = NULL;
+        temp -> right -> right = NULL;
+    }
+
     
+
+    
+
+
+
+    if(key < temp -> info)
+    {
+        insert(temp -> left , key);
+
+    }
+
+     // rotation portion
+    if(temp -> left != NULL)
+    {
+        if(temp == root) //root case where bf is disturbed at the root
+        {
+            bf = bfac(root);
+            if(bf > 1)
+            {
+                root = rr(root);
+                
+            }
+            return;
+        }
+
+        bf = bfac(temp -> left);
+
+       
+
+        if(bf > 1) // the insertion was done in left child of current node
+        {
+            //two cases for left child and left subtree case
+            if(search(temp -> left -> left,key))
+            {
+
+
+
+            }
+
+        }
+
         return;
 
     }
 
-
-
-    if(key > r->info && r -> right == NULL)
+    if(key > temp -> info)
     {
-        r -> right = new node;
-        r -> right -> info = key;
-        r ->right -> left = NULL;
-        r -> right -> right = NULL;
-        return;
-
-
-    }
-
-    if(key < r -> info)
-    {
-        insert(r -> left , key);
-        bf = bfac(r);
-
-        if(bf > 1)
-        {
-            //check if ll case or lr case 
-            if(r -> left -> left != NULL)
-            {
-                if(search(r -> left ->left, key))
-                {
-                    rr(r);
-                    return;
-                }
-            }
-
-            if(r ->left -> right != NULL)
-            {
-                if(search(r -> left -> right,key))
-                {
-                    rl(r -> left);
-                    rr(r);
-                    return;
-                }
-            }
-        }
-
-        if(bf < -1)
-        {
-            //   check if rr case or rl case
-
-            if(temp -> right -> right != NULL)
-            {
-                if(search(temp -> right -> right, key))
-                {
-                    rl(temp);
-                    return;
-                }
-            }
-
-            if(temp -> right -> left != NULL)
-            {
-                if(search(temp -> right -> left,key))
-                {
-                    rr(temp -> right);
-                    rl(temp);
-                }
-            }
-            
-            
-        }
-
-
-
-
-    }
-
-    if(key > r -> info)
-    {
-        insert(r -> right ,key);
-        if(bf > 1)
-        {
-            //check if ll case or lr case 
-
-        }
-
-        if(bf < -1)
-        {
-            //   check if rr case or rl case
-        }
+        insert(temp -> right ,key);
     }
 
 
@@ -585,19 +573,26 @@ int main()
 
     obj.insert(obj.root, 4);
     obj.insert(obj.root, 2);
-    obj.insert(obj.root, 9);
-    obj.insert(obj.root, 1);
-    obj.insert(obj.root, 3);
-    obj.insert(obj.root, 10);
-    obj.insert(obj.root, 8);
-    obj.insert(obj.root, 15);
     
+    obj.insert(obj.root, 1);
+   
+   
     
 
     obj.inorder(obj.root); 
     cout<<endl;
 
-    obj.search(obj.root, 20);
+    int v = obj.bfac(obj.root );
+    cout<<v;
+    cout<<endl;
+
+    cout<<obj.root -> info;
+    cout<<endl;
+
+    
+
+    // bool b = obj.search(obj.root, 15);
+    // cout<<b<<endl;
 
     //checking balance factor function
     // int bf;
