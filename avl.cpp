@@ -285,6 +285,7 @@ void BST::insert(node *temp , int key)
         temp -> left -> info = key;
         temp-> left -> right = NULL;
         temp -> left -> left = NULL;
+        return;
         
 
     }
@@ -299,6 +300,7 @@ void BST::insert(node *temp , int key)
         temp -> right -> info = key;
         temp ->right -> left = NULL;
         temp -> right -> right = NULL;
+        return;
     }
 
     
@@ -322,28 +324,30 @@ void BST::insert(node *temp , int key)
             if(bf > 1)
             {
                 root = rr(root);
+                return;
                 
             }
-            return;
+            
         }
-
-        bf = bfac(temp -> left);
-
+        //non root case:
        
+        bf = bfac(temp -> left);
 
         if(bf > 1) // the insertion was done in left child of current node
         {
             //two cases for left child and left subtree case
-            if(search(temp -> left -> left,key))
+            if(search(temp -> left -> left ->left,key))
             {
+                temp -> left = rr(temp -> left);
 
 
-
+                return;
             }
+            
 
         }
 
-        return;
+        
 
     }
 
@@ -571,23 +575,41 @@ int main()
 
     //checking insert function
 
-    obj.insert(obj.root, 4);
+    obj.insert(obj.root, 5);
     obj.insert(obj.root, 2);
-    
-    obj.insert(obj.root, 1);
-   
-   
-    
+    obj.insert(obj.root,1);
+    obj.insert(obj.root, 4);
+    obj.insert(obj.root, 0);
+    obj.insert(obj.root, -1);   
 
     obj.inorder(obj.root); 
     cout<<endl;
 
-    int v = obj.bfac(obj.root );
-    cout<<v;
+    
+
+
+
+    cout<<obj.root->left->right-> info;
     cout<<endl;
 
-    cout<<obj.root -> info;
-    cout<<endl;
+   
+
+    // int v = obj.bfac(obj.root );
+    // cout<<v;
+    // cout<<endl;
+
+    // cout<<obj.root -> info;
+    // cout<<endl;
+
+    // cout<<obj.root -> left -> info;
+    // cout<<endl;
+
+    // cout<<obj.root -> right -> info;
+    // cout<<endl;
+
+
+
+
 
     
 
