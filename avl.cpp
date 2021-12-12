@@ -316,12 +316,14 @@ void BST::insert(node *temp , int key)
     }
 
      // rotation portion
+
+     //rotation for left left and left right cases when bf > 1
     if(temp -> left != NULL)
     {
         if(temp == root) //root case where bf is disturbed at the root
         {
             bf = bfac(root);
-            if(bf > 1)
+            if(bf > 1 && bfac(root -> left) <= 1)
             {
                 root = rr(root);
                 return;
@@ -343,6 +345,11 @@ void BST::insert(node *temp , int key)
 
                 return;
             }
+            if(search(temp -> left -> left ->right,key))
+            {
+
+                return;
+            }
             
 
         }
@@ -354,6 +361,33 @@ void BST::insert(node *temp , int key)
     if(key > temp -> info)
     {
         insert(temp -> right ,key);
+    }
+
+    //rotation portion for right right and right left cases
+
+    if(temp -> right != NULL)
+    { //root case
+        if(temp == root)
+        {
+            bf = bfac(root);
+
+            if(bf < -1 && bfac(root -> right) >= -1)
+            {
+                root = rl(root);
+                return;
+            }
+        }
+
+        //non root case
+
+        bf = bfac(temp -> right);
+        if(bf < -1)
+        {
+            temp -> right = rl(temp -> right);
+            return;
+
+        }
+
     }
 
 
@@ -575,21 +609,34 @@ int main()
 
     //checking insert function
 
-    obj.insert(obj.root, 5);
-    obj.insert(obj.root, 2);
-    obj.insert(obj.root,1);
-    obj.insert(obj.root, 4);
-    obj.insert(obj.root, 0);
-    obj.insert(obj.root, -1);   
+    // obj.insert(obj.root, 5);
+    // obj.insert(obj.root, 2);
+    // obj.insert(obj.root,1);
+    // obj.insert(obj.root, 4);
+    // obj.insert(obj.root, 0);
+    // obj.insert(obj.root, -1); 
+
+    obj.insert(obj.root, 4); 
+    obj.insert(obj.root, 5); 
+    obj.insert(obj.root, 6); 
+    obj.insert(obj.root, 7);
+    obj.insert(obj.root, 8);
+
+
+
+
+
 
     obj.inorder(obj.root); 
     cout<<endl;
 
     
 
+    
 
 
-    cout<<obj.root->left->right-> info;
+
+    cout<<obj.root -> right->right-> info ;
     cout<<endl;
 
    
