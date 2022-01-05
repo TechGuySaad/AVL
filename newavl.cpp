@@ -152,7 +152,7 @@ int BST::height(node *temp)
 
    
 
-    if(lh> rh)
+    if(lh > rh)
     {
         h = lh;
         return h;
@@ -272,9 +272,9 @@ void BST::insert(node *temp , int key)
         
         bf = bfac(temp -> left);
 
-        if(bf > 1 ) //left left case
+        if(bf > 1 ) 
         {
-            if( key < temp -> left ->left -> info)
+            if( key < temp -> left ->left -> info)//left left case
             {
                 temp -> left = rr(temp -> left);
                 return;
@@ -282,11 +282,8 @@ void BST::insert(node *temp , int key)
             }
 
 
-        }
-
-        if(bf > 1  ) //left right case
-        {
-            if( key > temp -> left -> left -> info)
+        
+            if( key > temp -> left -> left -> info)//left right case
             {
                 temp -> left -> left = rl(temp -> left -> left);
                 temp -> left = rr(temp -> left);
